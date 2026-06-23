@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — Artist Profile</title>
+<meta property="og:title" content="ATCHÉ Artist Profile">
+<meta property="og:description" content="Verified booking profile on ATCHÉ">
+<meta property="og:image" id="og-image" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:      #C9A84C;
+  --gold-dim:  #8a6f2e;
+  --gold-light:#e8d5a3;
+  --rose:      #C47B7B;
+  --sage:      #7B9E87;
+  --violet:    #8B7EC8;
+  --sky:       #6aafc8;
+  --surface:   #0f0f0f;
+  --surface2:  #181818;
+  --surface3:  #222222;
+  --border:    #2e2e2e;
+  --border2:   #3a3a3a;
+  --text:      #f0ece4;
+  --text2:     #b8b0a4;
+  --text3:     #706860;
+  --radius:    12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+
+/* ── TOPBAR ──────────────────────────────────────────────────── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-bottom:1px solid var(--border);
+  background:var(--surface2);
+}
+.topbar-logo{
+  font-family:'Playfair Display',serif;color:var(--gold);
+  letter-spacing:.15em;font-size:1.25rem;text-decoration:none;
+}
+.topbar-cta{
+  padding:9px 18px;border-radius:8px;border:1px solid var(--gold-dim);
+  background:transparent;color:var(--gold);font-size:.8rem;font-weight:600;
+  cursor:pointer;font-family:inherit;text-decoration:none;
+  transition:.15s;white-space:nowrap;
+}
+.topbar-cta:hover{background:var(--gold);color:#000}
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero{
+  position:relative;
+  background:linear-gradient(160deg,#1a1508 0%,#0f0f0f 60%);
+  padding:48px 24px 0;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 50%, rgba(201,168,76,.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-inner{max-width:760px;margin:0 auto;position:relative}
+.hero-top{display:flex;align-items:flex-end;gap:24px;margin-bottom:24px}
+.avatar{
+  width:100px;height:100px;border-radius:50%;
+  background:var(--surface3);border:3px solid var(--border2);
+  overflow:hidden;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:2.5rem;color:var(--text3);
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.hero-identity{}
+.hero-name{
+  font-family:'Playfair Display',serif;font-size:2rem;
+  color:var(--text);line-height:1.1;margin-bottom:6px;
+}
+.hero-meta{font-size:.85rem;color:var(--text2);margin-bottom:10px}
+.genre-pills{display:flex;flex-wrap:wrap;gap:6px}
+.genre-pill{
+  padding:4px 10px;border-radius:14px;font-size:.72rem;
+  background:rgba(201,168,76,.1);color:var(--gold-light);
+  border:1px solid rgba(201,168,76,.2);
+}
+
+/* ── VERIFIED BADGE ─────────────────────────────────────────── */
+.verified-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;background:rgba(123,158,135,.08);
+  border:1px solid rgba(123,158,135,.2);border-radius:8px;
+  margin-bottom:24px;font-size:.8rem;color:var(--sage);
+}
+.verified-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0}
+
+/* ── STAT ROW ────────────────────────────────────────────────── */
+.stat-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border);
+}
+.stat-item{
+  padding:20px 16px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none}
+.stat-value{
+  font-family:'Playfair Display',serif;font-size:1.6rem;
+  color:var(--gold);margin-bottom:4px;
+}
+.stat-label{font-size:.7rem;color:var(--text3);letter-spacing:.04em;text-transform:uppercase}
+
+/* ── BODY ────────────────────────────────────────────────────── */
+.body-wrap{max-width:760px;margin:0 auto;padding:32px 24px}
+
+/* ── BIO ─────────────────────────────────────────────────────── */
+.bio-section{margin-bottom:32px}
+.bio-section p{color:var(--text2);line-height:1.75;font-size:.95rem}
+
+/* ── RATE CARD ──────────────────────────────────────────────── */
+.rate-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;margin-bottom:24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  flex-wrap:wrap;
+}
+.rate-info{}
+.rate-label{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.rate-value{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--text)}
+.rate-note{font-size:.75rem;color:var(--text3);margin-top:4px}
+
+/* ── BOOK BUTTON ────────────────────────────────────────────── */
+.book-btn{
+  padding:14px 32px;border-radius:10px;border:none;
+  background:var(--gold);color:#000;font-size:1rem;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;
+}
+.book-btn:hover{background:var(--gold-light)}
+.book-btn:disabled{background:var(--surface3);color:var(--text3);cursor:default;border:1px solid var(--border2)}
+
+/* ── HONESTY NOTE ───────────────────────────────────────────── */
+.honesty-note{
+  display:flex;gap:12px;align-items:flex-start;
+  background:rgba(139,126,200,.07);border:1px solid rgba(139,126,200,.2);
+  border-radius:var(--radius);padding:16px 20px;margin-bottom:32px;
+  font-size:.8rem;color:var(--text2);line-height:1.6;
+}
+.honesty-note .icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+/* ── TRACK RECORD ───────────────────────────────────────────── */
+.track-section{margin-bottom:32px}
+.track-head{
+  font-family:'Playfair Display',serif;font-size:1.1rem;
+  margin-bottom:16px;color:var(--text);
+}
+.track-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.track-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;text-align:center;
+}
+.track-val{font-size:1.4rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.track-val.gold{color:var(--gold)}
+.track-val.sage{color:var(--sage)}
+.track-val.sky{color:var(--sky)}
+.track-lbl{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+
+/* ── BOOKING MODAL ──────────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);
+  z-index:200;align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius);width:100%;max-width:500px;
+  padding:32px;max-height:90vh;overflow-y:auto;
+}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:6px}
+.modal .subtitle{color:var(--text2);font-size:.85rem;margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.75rem;color:var(--text2);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--surface3);border:1px solid var(--border2);
+  border-radius:8px;padding:12px 14px;color:var(--text);font-size:.9rem;
+  font-family:inherit;outline:none;transition:.15s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}
+.field textarea{resize:vertical;min-height:80px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.modal-grid{grid-template-columns:1fr}}
+.fee-preview{
+  padding:12px 14px;background:var(--surface3);border-radius:8px;
+  font-size:.8rem;color:var(--text2);margin-top:-8px;margin-bottom:4px;
+  display:none;line-height:1.8;
+}
+.fee-preview strong{color:var(--gold)}
+.modal-actions{display:flex;gap:10px;margin-top:24px}
+.btn-cancel{
+  flex:1;padding:12px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.875rem;cursor:pointer;font-family:inherit;
+}
+.btn-submit{
+  flex:2;padding:12px;border-radius:8px;border:none;
+  background:var(--gold);color:#000;font-size:.95rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:.15s;
+}
+.btn-submit:hover{background:var(--gold-light)}
+
+/* ── HONESTY BANNER ─────────────────────────────────────────── */
+.honesty-banner{
+  background:linear-gradient(135deg,rgba(139,126,200,.1),rgba(201,168,76,.08));
+  border:1px solid rgba(139,126,200,.3);border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:20px;font-size:.8rem;color:var(--text2);line-height:1.6;
+}
+.honesty-banner strong{color:var(--violet)}
+
+/* ── SUCCESS STATE ──────────────────────────────────────────── */
+.success-screen{
+  text-align:center;padding:40px 20px;
+}
+.success-icon{font-size:3rem;margin-bottom:16px}
+.success-title{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:8px}
+.success-sub{color:var(--text2);font-size:.875rem;line-height:1.6}
+
+/* ── LOADING / NOT FOUND ─────────────────────────────────────── */
+#loading{text-align:center;padding:100px 20px;color:var(--text3);font-size:.875rem}
+#not-found{display:none;text-align:center;padding:100px 20px}
+#not-found .icon{font-size:2.5rem;margin-bottom:12px}
+#not-found p{color:var(--text2);font-size:.875rem}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.footer{
+  border-top:1px solid var(--border);padding:24px;text-align:center;
+  color:var(--text3);font-size:.78rem;
+}
+.footer a{color:var(--gold-dim);text-decoration:none}
+.footer a:hover{color:var(--gold)}
+
+/* ── TOAST ────────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;right:24px;background:var(--surface3);
+  border:1px solid var(--border2);border-radius:10px;padding:14px 20px;
+  font-size:.875rem;z-index:999;opacity:0;transform:translateY(8px);
+  transition:.25s;pointer-events:none;max-width:300px;
+}
+.toast.show{opacity:1;transform:none}
+.toast.success{border-color:var(--sage);color:var(--sage)}
+.toast.error{border-color:var(--rose);color:var(--rose)}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media(max-width:600px){
+  .hero{padding:32px 16px 0}
+  .body-wrap{padding:24px 16px}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item:nth-child(3){border-top:1px solid var(--border)}
+  .hero-name{font-size:1.5rem}
+  .rate-card{flex-direction:column;align-items:flex-start}
+  .book-btn{width:100%}
+  .topbar{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-logo" href="#">ATCHÉ</a>
+  <a class="topbar-cta" href="atche-venue.html">Venue Login →</a>
+</div>
+
+<!-- LOADING -->
+<div id="loading">Loading profile…</div>
+
+<!-- NOT FOUND -->
+<div id="not-found">
+  <div class="icon">🔍</div>
+  <p>Artist profile not found.<br>The link may be invalid or the profile is private.</p>
+</div>
+
+<!-- PROFILE (hidden until loaded) -->
+<div id="profile-body" style="display:none">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div class="avatar" id="hero-avatar">🎤</div>
+        <div class="hero-identity">
+          <div class="hero-name" id="hero-name">—</div>
+          <div class="hero-meta" id="hero-meta">—</div>
+          <div class="genre-pills" id="hero-genres"></div>
+        </div>
+      </div>
+      <div class="verified-bar">
+        <div class="dot"></div>
+        Verified ATCHÉ Artist — stats sourced from confirmed event records
+      </div>
+    </div>
+
+    <div class="stat-row" style="max-width:760px;margin:0 auto">
+      <div class="stat-item">
+        <div class="stat-value" id="stat-events">0</div>
+        <div class="stat-label">Verified Events</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-energy">—</div>
+        <div class="stat-label">Avg Crowd Energy</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-rebook">—</div>
+        <div class="stat-label">Rebook Rate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-ontime">—</div>
+        <div class="stat-label">On-Time Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-wrap">
+
+    <div id="bio-section" class="bio-section" style="display:none">
+      <p id="hero-bio"></p>
+    </div>
+
+    <div class="rate-card">
+      <div class="rate-info">
+        <div class="rate-label">Rate Per Set</div>
+        <div class="rate-value" id="rate-value">Contact for rate</div>
+        <div class="rate-note">ATCHÉ fee (10%) billed to venue. Artist receives full rate.</div>
+      </div>
+      <button class="book-btn" id="book-btn" onclick="openBookingModal()">Request Booking</button>
+    </div>
+
+    <div class="honesty-note">
+      <div class="icon">🛡</div>
+      <div>
+        <strong style="color:var(--violet)">ATCHÉ Honesty Policy</strong> — Every stat on this page is verified by venue operators who hosted this artist.
+        ATCHÉ does not inflate numbers. Ratings are tamper-proof once submitted.
+      </div>
+    </div>
+
+    <div class="track-section" id="track-section" style="display:none">
+      <div class="track-head">Track Record</div>
+      <div class="track-grid" id="track-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  Powered by <a href="#">ATCHÉ</a> · The booking layer for DC nightlife
+</div>
+
+<!-- ── BOOKING REQUEST MODAL ──────────────────────────────────── -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal" id="modal-inner">
+
+    <!-- Step 1: Auth check -->
+    <div id="step-auth" style="display:none">
+      <h2>Request a Booking</h2>
+      <div class="subtitle">Sign in to your venue account to send a request</div>
+      <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="auth-pw" placeholder="••••••••"></div>
+      <div class="auth-err" id="auth-err" style="color:var(--rose);font-size:.8rem;margin-bottom:12px"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+        <button class="btn-submit" onclick="doModalLogin()">Sign In & Continue</button>
+      </div>
+      <p style="text-align:center;margin-top:16px;font-size:.78rem;color:var(--text3)">
+        No account? <a href="atche-venue.html" style="color:var(--gold)">Create venue account →</a>
+      </p>
+    </div>
+
+    <!-- Step 2: Booking form (logged in) -->
+    <div id="step-form" style="display:none">
+      <h2>Request Booking</h2>
+      <div class="subtitle" id="form-artist-name"></div>
+
+      <div class="honesty-banner">
+        <strong>ATCHÉ Honesty Policy</strong> — Only submit real events. Ghosting after acceptance gets your account suspended.
+        You'll pay the artist's rate + 10% ATCHÉ fee on confirmed bookings.
+      </div>
+
+      <div class="modal-grid">
+        <div class="field">
+          <label>Event Name</label>
+          <input type="text" id="bk-event-name" placeholder="Yacht Party Vol.3">
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="bk-date">
+        </div>
+        <div class="field">
+          <label>Start Time</label>
+          <input type="time" id="bk-time">
+        </div>
+        <div class="field">
+          <label>Venue / Location</label>
+          <input type="text" id="bk-venue" placeholder="The Wharf DC">
+        </div>
+        <div class="field">
+          <label>City</label>
+          <input type="text" id="bk-city" placeholder="Washington DC">
+        </div>
+        <div class="field">
+          <label>Your Offer ($)</label>
+          <input type="number" id="bk-rate" placeholder="300" oninput="updateFeePreview()">
+        </div>
+      </div>
+
+      <div class="fee-preview" id="fee-preview">
+        Artist rate: <strong id="fp-rate"></strong>  ·  ATCHÉ fee (10%): <strong id="fp-fee"></strong>  ·  Total you pay: <strong id="fp-total"></strong>
+      </div>
+
+      <div class="field">
+        <label>Message to Artist</label>
+        <textarea id="bk-message" placeholder="Vibe, crowd size, set length, dress code..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+        <button class="btn-submit" onclick="submitBooking()">Send Request</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div id="step-success" style="display:none">
+      <div class="success-screen">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Request Sent</div>
+        <div class="success-sub">
+          The artist has been notified and will respond within 48 hours.<br>
+          Check your bookings dashboard for updates.
+        </div>
+        <div style="margin-top:24px;display:flex;gap:10px;justify-content:center">
+          <button class="btn-cancel" onclick="closeBookingModal()" style="flex:initial;padding:10px 20px">Close</button>
+          <a href="atche-venue.html" class="btn-submit" style="flex:initial;padding:10px 20px;display:inline-block;text-decoration:none;text-align:center">Go to Dashboard →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = 'https://aayigsbmmdolvnicxacs.supabase.co';
+const SB_KEY = 'sb_publishable_ofAZ_64cKZXJefM5nbbt3g_wNOoF5DC';
+
+let ARTIST = null;
+let SESSION = null;
+
+// ─── SUPABASE ────────────────────────────────────────────────
+async function sb(path, opts = {}) {
+  const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': `Bearer ${SESSION ? SESSION.access_token : SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...opts.headers
+    },
+    method: opts.method || 'GET',
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || res.statusText) }
+  return res.status === 204 ? null : res.json();
+}
+
+async function sbAuth(path, body) {
+  const res = await fetch(`${SB_URL}/auth/v1/${path}`, {
+    method: 'POST',
+    headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.message || 'Auth error');
+  return data;
+}
+
+// ─── LOAD PROFILE ─────────────────────────────────────────────
+async function loadProfile() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { showNotFound(); return }
+
+  try {
+    const rows = await sb(`artist_profiles?id=eq.${id}&is_public=eq.true&select=*`);
+    if (!rows || !rows.length) { showNotFound(); return }
+    ARTIST = rows[0];
+    renderProfile();
+  } catch(e) { showNotFound() }
+}
+
+function showNotFound() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('not-found').style.display = 'block';
+}
+
+function renderProfile() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('profile-body').style.display = 'block';
+
+  const a = ARTIST;
+  document.title = `${a.stage_name} — ATCHÉ`;
+
+  // Avatar
+  if (a.photo_url) {
+    document.getElementById('hero-avatar').innerHTML = `<img src="${a.photo_url}">`;
+  }
+
+  // Identity
+  document.getElementById('hero-name').textContent = a.stage_name;
+  const meta = [a.location, a.instagram ? '@'+a.instagram.replace('@','') : ''].filter(Boolean).join(' · ');
+  document.getElementById('hero-meta').textContent = meta || 'ATCHÉ Artist';
+  document.getElementById('hero-genres').innerHTML = (a.genres||[]).map(g=>
+    `<span class="genre-pill">${g}</span>`
+  ).join('');
+
+  // Stats
+  document.getElementById('stat-events').textContent = a.total_events || 0;
+  document.getElementById('stat-energy').textContent = Number(a.avg_energy) > 0 ? Number(a.avg_energy).toFixed(1)+' / 5' : '—';
+  document.getElementById('stat-rebook').textContent = Number(a.rebook_rate) > 0 ? Math.round(a.rebook_rate)+'%' : '—';
+  document.getElementById('stat-ontime').textContent = Number(a.on_time_rate) > 0 ? Math.round(a.on_time_rate)+'%' : '—';
+
+  // Bio
+  if (a.bio) {
+    document.getElementById('hero-bio').textContent = a.bio;
+    document.getElementById('bio-section').style.display = 'block';
+  }
+
+  // Rate
+  if (a.rate_min && a.rate_max) {
+    document.getElementById('rate-value').textContent = `$${a.rate_min.toLocaleString()} – $${a.rate_max.toLocaleString()} / set`;
+  } else if (a.rate_min) {
+    document.getElementById('rate-value').textContent = `From $${a.rate_min.toLocaleString()} / set`;
+  }
+
+  // Track record cards (only if they have event history)
+  if (a.total_events > 0) {
+    const trackData = [
+      { val: a.total_events, label: 'Verified Events', cls: 'gold' },
+      { val: Number(a.avg_energy) > 0 ? Number(a.avg_energy).toFixed(1)+' ★' : '—', label: 'Avg Energy Rating', cls: 'gold' },
+      { val: Number(a.rebook_rate) > 0 ? Math.round(a.rebook_rate)+'%' : '—', label: 'Rebook Rate', cls: 'sage' },
+      { val: Number(a.on_time_rate) > 0 ? Math.round(a.on_time_rate)+'%' : '—', label: 'On-Time Rate', cls: 'sky' },
+    ];
+    document.getElementById('track-grid').innerHTML = trackData.map(d => `
+      <div class="track-card">
+        <div class="track-val ${d.cls}">${d.val}</div>
+        <div class="track-lbl">${d.label}</div>
+      </div>
+    `).join('');
+    document.getElementById('track-section').style.display = 'block';
+  }
+
+  // Check saved session
+  const saved = localStorage.getItem('atche_venue_session');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      if (s.expires_at && Date.now()/1000 < s.expires_at) SESSION = s;
+    } catch(e) {}
+  }
+}
+
+// ─── BOOKING MODAL ─────────────────────────────────────────────
+function openBookingModal() {
+  document.getElementById('booking-modal').classList.add('open');
+  if (SESSION) {
+    showFormStep();
+  } else {
+    showAuthStep();
+  }
+}
+function closeBookingModal() {
+  document.getElementById('booking-modal').classList.remove('open');
+}
+function showAuthStep() {
+  document.getElementById('step-auth').style.display = 'block';
+  document.getElementById('step-form').style.display = 'none';
+  document.getElementById('step-success').style.display = 'none';
+}
+function showFormStep() {
+  document.getElementById('step-auth').style.display = 'none';
+  document.getElementById('step-form').style.display = 'block';
+  document.getElementById('step-success').style.display = 'none';
+  document.getElementById('form-artist-name').textContent = `Artist: ${ARTIST.stage_name}`;
+}
+function showSuccessStep() {
+  document.getElementById('step-auth').style.display = 'none';
+  document.getElementById('step-form').style.display = 'none';
+  document.getElementById('step-success').style.display = 'block';
+}
+
+async function doModalLogin() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pw    = document.getElementById('auth-pw').value;
+  document.getElementById('auth-err').textContent = '';
+  try {
+    const data = await sbAuth('token?grant_type=password', { email, password: pw });
+    // Check role
+    const meta = await fetch(`${SB_URL}/rest/v1/users_meta?id=eq.${data.user.id}&select=role`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${data.access_token}` }
+    }).then(r=>r.json());
+    if (!meta[0] || !['venue','admin'].includes(meta[0].role)) {
+      document.getElementById('auth-err').textContent = 'This is the venue login. Artists use the artist portal.';
+      return;
+    }
+    SESSION = data;
+    localStorage.setItem('atche_venue_session', JSON.stringify(data));
+    showFormStep();
+  } catch(e) { document.getElementById('auth-err').textContent = e.message }
+}
+
+function updateFeePreview() {
+  const r = parseInt(document.getElementById('bk-rate').value) || 0;
+  if (r > 0) {
+    const fee = Math.round(r * 0.10);
+    document.getElementById('fp-rate').textContent = '$'+r.toLocaleString();
+    document.getElementById('fp-fee').textContent  = '$'+fee.toLocaleString();
+    document.getElementById('fp-total').textContent = '$'+(r+fee).toLocaleString();
+    document.getElementById('fee-preview').style.display = 'block';
+  } else {
+    document.getElementById('fee-preview').style.display = 'none';
+  }
+}
+
+async function submitBooking() {
+  const rate      = parseInt(document.getElementById('bk-rate').value) || 0;
+  const eventName = document.getElementById('bk-event-name').value.trim();
+  if (!eventName) { toast('Event name is required', 'error'); return }
+  if (!rate) { toast('Enter your offered rate', 'error'); return }
+
+  try {
+    await fetch(`${SB_URL}/rest/v1/booking_requests`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SESSION.access_token}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        artist_id:     ARTIST.id,
+        venue_user_id: SESSION.user.id,
+        event_name:    eventName,
+        event_date:    document.getElementById('bk-date').value || null,
+        start_time:    document.getElementById('bk-time').value || null,
+        venue_name:    document.getElementById('bk-venue').value.trim(),
+        city:          document.getElementById('bk-city').value.trim(),
+        offered_rate:  rate,
+        atche_fee:     Math.round(rate * 0.10),
+        message:       document.getElementById('bk-message').value.trim()
+      })
+    });
+    showSuccessStep();
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── TOAST ────────────────────────────────────────────────────
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+// Close modal on backdrop click
+document.getElementById('booking-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeBookingModal();
+});
+
+// ─── BOOT ─────────────────────────────────────────────────────
+loadProfile();
+</script>
+</body>
+</html>
