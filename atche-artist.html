@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — Artist Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:     #C9A84C;
+  --gold-dim: #8a6f2e;
+  --gold-light: #e8d5a3;
+  --rose:     #C47B7B;
+  --sage:     #7B9E87;
+  --violet:   #8B7EC8;
+  --sky:      #6aafc8;
+  --surface:  #0f0f0f;
+  --surface2: #181818;
+  --surface3: #222222;
+  --border:   #2e2e2e;
+  --border2:  #3a3a3a;
+  --text:     #f0ece4;
+  --text2:    #b8b0a4;
+  --text3:    #706860;
+  --radius:   12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+
+/* ── AUTH SCREEN ─────────────────────────────────────────────── */
+#auth-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+.auth-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:48px 40px;max-width:420px;width:100%;
+}
+.auth-logo{
+  font-family:'Playfair Display',serif;font-size:2rem;
+  color:var(--gold);letter-spacing:.15em;text-align:center;margin-bottom:8px;
+}
+.auth-sub{text-align:center;color:var(--text2);font-size:.875rem;margin-bottom:36px}
+.auth-tab-row{display:flex;gap:8px;margin-bottom:28px}
+.auth-tab{
+  flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.875rem;cursor:pointer;
+  transition:.15s;
+}
+.auth-tab.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.75rem;color:var(--text2);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--surface3);border:1px solid var(--border2);
+  border-radius:8px;padding:12px 14px;color:var(--text);font-size:.9rem;
+  font-family:inherit;outline:none;transition:.15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.field textarea{resize:vertical;min-height:80px}
+.btn-primary{
+  width:100%;padding:14px;border-radius:8px;border:none;
+  background:var(--gold);color:#000;font-size:.95rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:.15s;margin-top:4px;
+}
+.btn-primary:hover{background:var(--gold-light)}
+.auth-err{color:var(--rose);font-size:.8rem;margin-top:12px;text-align:center}
+.auth-switch{text-align:center;color:var(--text2);font-size:.8rem;margin-top:20px}
+.auth-switch a{color:var(--gold);cursor:pointer;text-decoration:none}
+
+/* ── APP SHELL ───────────────────────────────────────────────── */
+#app{display:none;min-height:100vh;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-bottom:1px solid var(--border);
+  background:var(--surface2);position:sticky;top:0;z-index:50;
+}
+.topbar-logo{font-family:'Playfair Display',serif;color:var(--gold);letter-spacing:.15em;font-size:1.25rem}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-name{color:var(--text2);font-size:.85rem}
+.btn-sm{
+  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.8rem;cursor:pointer;
+  font-family:inherit;transition:.15s;
+}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.danger:hover{border-color:var(--rose);color:var(--rose)}
+
+.nav-tabs{
+  display:flex;gap:4px;padding:12px 24px;border-bottom:1px solid var(--border);
+  background:var(--surface2);overflow-x:auto;
+}
+.nav-tab{
+  padding:8px 20px;border-radius:8px;border:none;background:transparent;
+  color:var(--text2);font-size:.875rem;cursor:pointer;white-space:nowrap;
+  font-family:inherit;transition:.15s;position:relative;
+}
+.nav-tab.active{background:var(--surface3);color:var(--gold)}
+.nav-tab .badge{
+  position:absolute;top:4px;right:6px;
+  background:var(--gold);color:#000;border-radius:50%;
+  width:16px;height:16px;font-size:.65rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.main{flex:1;padding:24px;max-width:960px;margin:0 auto;width:100%}
+
+/* ── SECTION HEADER ─────────────────────────────────────────── */
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.section-title{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--text)}
+.btn-outline{
+  padding:9px 18px;border-radius:8px;border:1px solid var(--gold);
+  background:transparent;color:var(--gold);font-size:.8rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:.15s;
+}
+.btn-outline:hover{background:var(--gold);color:#000}
+
+/* ── STAT CARDS ─────────────────────────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;text-align:center;
+}
+.stat-value{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:4px}
+.stat-label{font-size:.75rem;color:var(--text2);letter-spacing:.04em}
+
+/* ── PROFILE FORM ───────────────────────────────────────────── */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.profile-grid{grid-template-columns:1fr}}
+.profile-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;margin-bottom:20px;
+}
+.profile-card h3{font-size:.85rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+.avatar-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.avatar{
+  width:72px;height:72px;border-radius:50%;background:var(--surface3);
+  border:2px solid var(--border2);overflow:hidden;display:flex;
+  align-items:center;justify-content:center;color:var(--text3);font-size:1.5rem;
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.btn-upload{
+  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.8rem;cursor:pointer;
+  font-family:inherit;transition:.15s;
+}
+.btn-upload:hover{border-color:var(--gold);color:var(--gold)}
+.rate-row{display:flex;gap:12px;align-items:center}
+.rate-row span{color:var(--text3);font-size:.875rem}
+.genre-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{
+  padding:5px 12px;border-radius:20px;border:1px solid var(--border2);
+  font-size:.75rem;color:var(--text2);cursor:pointer;transition:.15s;
+  background:transparent;font-family:inherit;
+}
+.chip.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.save-bar{
+  display:flex;align-items:center;justify-content:flex-end;gap:12px;
+  padding-top:16px;border-top:1px solid var(--border);margin-top:16px;
+}
+.save-msg{font-size:.8rem;color:var(--sage)}
+
+/* ── ONBOARDING BANNER ──────────────────────────────────────── */
+#onboarding-banner{
+  background:linear-gradient(135deg,rgba(201,168,76,.10) 0%,rgba(139,126,200,.08) 100%);
+  border:1px solid var(--gold-dim);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:24px;animation:fadeIn .4s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.ob-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px;flex-wrap:wrap}
+.ob-title{font-size:.875rem;font-weight:600;color:var(--gold);letter-spacing:.03em}
+.ob-pct{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);white-space:nowrap}
+.ob-bar-wrap{background:var(--surface3);border-radius:99px;height:5px;margin-bottom:14px;overflow:hidden}
+.ob-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .6s ease}
+.ob-fields{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.ob-field{
+  display:flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;border:1px solid;font-size:.72rem;
+}
+.ob-field.done{border-color:rgba(123,158,135,.5);color:var(--sage)}
+.ob-field.miss{border-color:var(--border);color:var(--text3)}
+.ob-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ob-field.done .ob-dot{background:var(--sage)}
+.ob-field.miss .ob-dot{background:var(--border2)}
+.ob-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ob-cta{
+  padding:8px 20px;border-radius:8px;border:none;
+  background:var(--gold);color:#000;font-size:.8rem;font-weight:600;
+  cursor:pointer;font-family:inherit;
+}
+.ob-cta:hover{background:var(--gold-light)}
+.ob-skip{font-size:.72rem;color:var(--text3);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline}
+.ob-skip:hover{color:var(--text2)}
+
+/* ── PUBLIC PROFILE LINK ────────────────────────────────────── */
+.profile-link-card{
+  background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(139,126,200,.08));
+  border:1px solid var(--gold-dim);border-radius:var(--radius);
+  padding:20px 24px;display:flex;align-items:center;gap:16px;margin-bottom:24px;
+}
+.profile-link-icon{font-size:1.5rem}
+.profile-link-text{flex:1}
+.profile-link-text strong{display:block;color:var(--gold);font-size:.9rem;margin-bottom:2px}
+.profile-link-text small{color:var(--text2);font-size:.8rem}
+.profile-link-url{
+  font-size:.75rem;color:var(--text3);word-break:break-all;margin-top:4px;
+}
+.btn-copy{
+  padding:9px 16px;border-radius:8px;border:1px solid var(--gold-dim);
+  background:transparent;color:var(--gold);font-size:.8rem;cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:.15s;
+}
+.btn-copy:hover{background:var(--gold);color:#000}
+.btn-copy.copied{background:var(--sage);border-color:var(--sage);color:#000}
+
+/* ── BOOKINGS LIST ──────────────────────────────────────────── */
+.booking-list{display:flex;flex-direction:column;gap:12px}
+.booking-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;
+}
+.booking-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.booking-title{font-size:1rem;color:var(--text);margin-bottom:4px}
+.booking-meta{font-size:.8rem;color:var(--text2)}
+.status-pill{
+  padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;
+  letter-spacing:.04em;white-space:nowrap;
+}
+.status-pending{background:rgba(201,168,76,.15);color:var(--gold)}
+.status-accepted{background:rgba(123,158,135,.15);color:var(--sage)}
+.status-declined{background:rgba(196,123,123,.15);color:var(--rose)}
+.status-completed{background:rgba(106,175,200,.15);color:var(--sky)}
+.booking-details{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
+}
+.booking-detail .label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.booking-detail .val{font-size:.875rem;color:var(--text)}
+.booking-actions{display:flex;gap:8px;margin-top:16px}
+.btn-accept{
+  padding:9px 18px;border-radius:8px;border:none;
+  background:var(--sage);color:#fff;font-size:.8rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:.15s;
+}
+.btn-accept:hover{filter:brightness(1.15)}
+.btn-decline{
+  padding:9px 18px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--rose);font-size:.8rem;
+  cursor:pointer;font-family:inherit;transition:.15s;
+}
+.btn-decline:hover{border-color:var(--rose)}
+
+/* ── EMPTY STATE ────────────────────────────────────────────── */
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty .icon{font-size:2.5rem;margin-bottom:12px}
+.empty p{font-size:.875rem}
+
+/* ── POST-EVENT MODAL ───────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:200;align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius);width:100%;max-width:480px;padding:32px;
+  max-height:90vh;overflow-y:auto;
+}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:20px}
+.stars-row{display:flex;gap:8px;margin-top:6px}
+.star{
+  font-size:1.4rem;cursor:pointer;color:var(--text3);transition:.1s;
+  background:none;border:none;padding:0;
+}
+.star.active{color:var(--gold)}
+.toggle-group{display:flex;gap:8px;margin-top:6px}
+.toggle-btn{
+  flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.85rem;cursor:pointer;
+  font-family:inherit;transition:.15s;
+}
+.toggle-btn.active.yes{background:rgba(123,158,135,.2);border-color:var(--sage);color:var(--sage)}
+.toggle-btn.active.no{background:rgba(196,123,123,.2);border-color:var(--rose);color:var(--rose)}
+.modal-actions{display:flex;gap:10px;margin-top:24px}
+.btn-cancel{
+  flex:1;padding:12px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--text2);font-size:.875rem;cursor:pointer;
+  font-family:inherit;
+}
+
+/* ── TOAST ──────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--surface3);border:1px solid var(--border2);
+  border-radius:10px;padding:14px 20px;font-size:.875rem;
+  z-index:999;opacity:0;transform:translateY(8px);
+  transition:.25s;pointer-events:none;max-width:300px;
+}
+.toast.show{opacity:1;transform:none}
+.toast.success{border-color:var(--sage);color:var(--sage)}
+.toast.error{border-color:var(--rose);color:var(--rose)}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media(max-width:600px){
+  .main{padding:16px}
+  .topbar{padding:12px 16px}
+  .stat-value{font-size:1.4rem}
+  .profile-link-card{flex-direction:column;text-align:center}
+  .nav-tabs{padding:10px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">ATCHÉ</div>
+    <div class="auth-sub">Artist Portal</div>
+
+    <!-- Sign in (default) -->
+    <div id="login-form">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@email.com"
+               onkeydown="if(event.key==='Enter')document.getElementById('login-pw').focus()">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-pw" placeholder="••••••••"
+               onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="auth-err" id="login-err"></div>
+      <div style="text-align:center;margin-top:16px">
+        <span style="font-size:.8rem;color:var(--text3)">New artist?</span>
+        <button onclick="showAuthForm('signup')" style="background:none;border:none;color:var(--gold);font-size:.8rem;cursor:pointer;font-family:inherit;padding:0 4px;text-decoration:underline">Create account →</button>
+      </div>
+    </div>
+
+    <!-- Sign up -->
+    <div id="signup-form" style="display:none">
+      <div class="field">
+        <label>Stage Name</label>
+        <input type="text" id="signup-name" placeholder="DJ Hyphen">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@email.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="signup-pw" placeholder="8+ characters"
+               onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+      <button class="btn-primary" id="signup-btn" onclick="doSignup()">Create Artist Account</button>
+      <div class="auth-err" id="signup-err"></div>
+      <div style="text-align:center;margin-top:16px">
+        <span style="font-size:.8rem;color:var(--text3)">Already have an account?</span>
+        <button onclick="showAuthForm('login')" style="background:none;border:none;color:var(--gold);font-size:.8rem;cursor:pointer;font-family:inherit;padding:0 4px;text-decoration:underline">Sign in →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════════════════════ -->
+<div id="app" style="display:none;flex-direction:column">
+
+  <div class="topbar">
+    <div class="topbar-logo">ATCHÉ</div>
+    <div class="topbar-right">
+      <span class="topbar-name" id="topbar-name"></span>
+      <button class="btn-sm danger" onclick="doSignout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('overview')" id="tab-overview">Overview</button>
+    <button class="nav-tab" onclick="showTab('bookings')" id="tab-bookings">
+      Bookings <span class="badge" id="bookings-badge" style="display:none"></span>
+    </button>
+    <button class="nav-tab" onclick="showTab('profile')" id="tab-profile">My Profile</button>
+  </div>
+
+
+  <!-- ── ONBOARDING BANNER ──────────────────────────────────── -->
+  <div id="onboarding-banner" style="display:none">
+    <!-- rendered by renderOnboardingBanner() -->
+  </div>
+
+  <div class="main">
+
+    <!-- ── OVERVIEW ──────────────────────────────────────────── -->
+    <div id="view-overview">
+      <div class="profile-link-card" id="public-link-card" style="display:none">
+        <div class="profile-link-icon">🔗</div>
+        <div class="profile-link-text">
+          <strong>Your Public Profile</strong>
+          <small>Share this link with venues and event operators to get booked</small>
+          <div class="profile-link-url" id="public-link-url"></div>
+        </div>
+        <button class="btn-copy" id="copy-link-btn" onclick="copyPublicLink()">Copy Link</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-events">0</div>
+          <div class="stat-label">Verified Events</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-energy">—</div>
+          <div class="stat-label">Avg Crowd Energy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-rebook">—</div>
+          <div class="stat-label">Rebook Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-ontime">—</div>
+          <div class="stat-label">On-Time Rate</div>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:8px">
+        <div class="section-title">Pending Bookings</div>
+        <button class="btn-outline" onclick="showTab('bookings')">View All →</button>
+      </div>
+      <div id="pending-preview">
+        <div class="empty"><div class="icon">🎵</div><p>No pending booking requests yet.</p></div>
+      </div>
+    </div>
+
+    <!-- ── BOOKINGS ───────────────────────────────────────────── -->
+    <div id="view-bookings" style="display:none">
+      <div class="section-head">
+        <div class="section-title">Booking Requests</div>
+      </div>
+      <div id="bookings-list" class="booking-list">
+        <div class="empty"><div class="icon">📬</div><p>No booking requests yet. Share your profile link to get booked.</p></div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ───────────────────────────────────────────── -->
+    <div id="view-profile" style="display:none">
+      <div class="section-head">
+        <div class="section-title">My Artist Profile</div>
+      </div>
+
+      <div class="profile-card">
+        <h3>Photo & Identity</h3>
+        <div class="avatar-row">
+          <div class="avatar" id="avatar-preview">🎤</div>
+          <label>
+            <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(this)">
+            <span class="btn-upload" onclick="document.getElementById('photo-file').click()">Upload Photo</span>
+          </label>
+        </div>
+        <div class="profile-grid">
+          <div class="field">
+            <label>Stage Name</label>
+            <input type="text" id="pf-name" placeholder="DJ Hyphen">
+          </div>
+          <div class="field">
+            <label>Instagram</label>
+            <input type="text" id="pf-ig" placeholder="@yourhandle">
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" id="pf-location" placeholder="Washington DC">
+          </div>
+        </div>
+        <div class="field">
+          <label>Bio</label>
+          <textarea id="pf-bio" placeholder="What you bring to the floor. Keep it sharp."></textarea>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <h3>Genres</h3>
+        <div class="genre-chips" id="genre-chips">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <h3>Rate</h3>
+        <div class="rate-row">
+          <div class="field" style="flex:1;margin-bottom:0">
+            <label>Minimum ($)</label>
+            <input type="number" id="pf-rate-min" placeholder="200">
+          </div>
+          <span style="margin-top:20px">—</span>
+          <div class="field" style="flex:1;margin-bottom:0">
+            <label>Maximum ($)</label>
+            <input type="number" id="pf-rate-max" placeholder="600">
+          </div>
+        </div>
+        <p style="font-size:.75rem;color:var(--text3);margin-top:12px">
+          ATCHÉ charges 10% to the venue on accepted bookings. You keep 100% of your rate.
+        </p>
+      </div>
+
+      <div class="profile-card">
+        <h3>Visibility</h3>
+        <div class="toggle-group" id="visibility-group">
+          <button class="toggle-btn active yes" onclick="setVisibility(true)">Public — visible to venues</button>
+          <button class="toggle-btn" onclick="setVisibility(false)">Private</button>
+        </div>
+      </div>
+
+      <div class="save-bar">
+        <span class="save-msg" id="profile-save-msg"></span>
+        <button class="btn-primary" style="width:auto;padding:10px 28px" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ── POST-EVENT RECORD MODAL ────────────────────────────── -->
+<div class="modal-overlay" id="record-modal">
+  <div class="modal">
+    <h2>Post-Event Record</h2>
+    <p style="color:var(--text2);font-size:.85rem;margin-bottom:24px" id="record-event-name"></p>
+
+    <div class="field">
+      <label>Crowd Energy (1–5)</label>
+      <div class="stars-row" id="energy-stars">
+        <button class="star" onclick="setEnergy(1)">★</button>
+        <button class="star" onclick="setEnergy(2)">★</button>
+        <button class="star" onclick="setEnergy(3)">★</button>
+        <button class="star" onclick="setEnergy(4)">★</button>
+        <button class="star" onclick="setEnergy(5)">★</button>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:16px">
+      <label>Showed Up On Time?</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" id="ontime-yes" onclick="setOnTime(true)">Yes</button>
+        <button class="toggle-btn" id="ontime-no" onclick="setOnTime(false)">No</button>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:16px">
+      <label>Would the venue rebook?</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" id="rebook-yes" onclick="setRebook(true)">Yes</button>
+        <button class="toggle-btn" id="rebook-no" onclick="setRebook(false)">No</button>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:16px">
+      <label>Notes</label>
+      <textarea id="record-notes" placeholder="Anything worth knowing for next time..."></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeRecordModal()">Cancel</button>
+      <button class="btn-primary" style="flex:2" onclick="submitRecord()">Submit Record</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────
+const SB_URL = 'https://aayigsbmmdolvnicxacs.supabase.co';
+const SB_KEY = 'sb_publishable_ofAZ_64cKZXJefM5nbbt3g_wNOoF5DC';
+const BASE_URL = window.location.origin + window.location.pathname.replace('atche-artist.html','');
+const PUBLIC_PROFILE_URL = BASE_URL + 'atche-public.html';
+
+// ─── GENRE OPTIONS ────────────────────────────────────────────
+const GENRES = ['Hip-Hop','Afrobeats','House','Techno','R&B','Dancehall','Reggaeton','Soul','Neo-Soul','Trap','Drill','Amapiano','Open Format'];
+
+// ─── STATE ────────────────────────────────────────────────────
+let SESSION = null;
+let USER_META = null;
+let ARTIST_PROFILE = null;
+let BOOKINGS = [];
+let selectedGenres = [];
+let profilePublic = true;
+let energyVal = 0;
+let onTimeVal = null;
+let rebookVal = null;
+let activeRecordBookingId = null;
+let activeRecordArtistId = null;
+let pendingPhotoBlob = null;
+
+// ─── SUPABASE HELPERS ─────────────────────────────────────────
+async function sb(path, opts = {}) {
+  const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': `Bearer ${SESSION ? SESSION.access_token : SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...opts.headers
+    },
+    method: opts.method || 'GET',
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || res.statusText) }
+  return res.status === 204 ? null : res.json();
+}
+
+async function sbAuth(path, body) {
+  const res = await fetch(`${SB_URL}/auth/v1/${path}`, {
+    method: 'POST',
+    headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.message || 'Auth error');
+  return data;
+}
+
+async function sbStorage(bucket, filename, blob) {
+  const res = await fetch(`${SB_URL}/storage/v1/object/${bucket}/${filename}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': `Bearer ${SESSION.access_token}`,
+      'Content-Type': blob.type,
+      'x-upsert': 'true'
+    },
+    body: blob
+  });
+  if (!res.ok) throw new Error('Upload failed');
+  return `${SB_URL}/storage/v1/object/public/${bucket}/${filename}`;
+}
+
+// ─── AUTH ─────────────────────────────────────────────────────
+function showAuthForm(t) {
+  document.getElementById('login-form').style.display = t==='login'?'block':'none';
+  document.getElementById('signup-form').style.display = t==='signup'?'block':'none';
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('signup-err').textContent = '';
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-pw').value;
+  const errEl = document.getElementById('login-err');
+  const btn   = document.getElementById('login-btn');
+  if (!email || !pw) { errEl.textContent = 'Enter your email and password.'; return; }
+  errEl.textContent = ''; btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const data = await sbAuth('token?grant_type=password', { email, password: pw });
+    SESSION = { ...data, expires_at: Math.floor(Date.now()/1000) + (data.expires_in || 3600) };
+    localStorage.setItem('atche_session', JSON.stringify(SESSION));
+    await initApp();
+  } catch(e) {
+    const msg = e.message || '';
+    if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('credentials')) {
+      errEl.innerHTML = 'Incorrect email or password. <span style="color:var(--gold);cursor:pointer;text-decoration:underline" onclick="showAuthForm('signup')">New here?</span>';
+    } else if (msg.toLowerCase().includes('confirm')) {
+      errEl.textContent = 'Please check your email to confirm your account.';
+    } else {
+      errEl.textContent = msg;
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+async function doSignup() {
+  const name  = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pw    = document.getElementById('signup-pw').value;
+  document.getElementById('signup-err').textContent = '';
+  if (!name || !email || !pw) { document.getElementById('signup-err').textContent = 'All fields required'; return }
+  try {
+    const data = await sbAuth('signup', { email, password: pw });
+    SESSION = data;
+    // Insert users_meta row with 'artist' role
+    await sb('users_meta', {
+      method: 'POST',
+      body: { id: SESSION.user.id, role: 'artist', display_name: name }
+    });
+    // Create empty artist profile
+    await sb('artist_profiles', {
+      method: 'POST',
+      body: { user_id: SESSION.user.id, stage_name: name, is_public: true }
+    });
+    await initApp();
+  } catch(e) {
+    errEl.textContent = e.message;
+    btn.disabled = false; btn.textContent = 'Create Artist Account';
+  }
+}
+
+async function doSignout() {
+  SESSION = null; USER_META = null; ARTIST_PROFILE = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+async function initApp() {
+  try {
+    const meta = await sb(`users_meta?id=eq.${SESSION.user.id}&select=*`);
+    USER_META = meta[0];
+    if (!USER_META) {
+      document.getElementById('login-err').textContent = 'Account not found. Create one below.';
+      showAuthForm('signup'); SESSION = null; return;
+    }
+    if (USER_META.role === 'admin') {
+      // Admin: redirect to hub admin dashboard
+      window.location.href = 'atche-bookings-hub.html';
+      return;
+    }
+    if (USER_META.role !== 'artist') {
+      document.getElementById('login-err').textContent = 'This portal is for artists. Venues sign in at atche-venue.html.';
+      SESSION = null; return;
+    }
+    const profiles = await sb(`artist_profiles?user_id=eq.${SESSION.user.id}&select=*`);
+    ARTIST_PROFILE = profiles[0] || null;
+
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('topbar-name').textContent = ARTIST_PROFILE?.stage_name || USER_META.display_name || '';
+
+    populateProfileForm();
+    await loadBookings();
+    renderOverview();
+    buildGenreChips();
+  } catch(e) { console.error(e); document.getElementById('login-err').textContent = e.message }
+}
+
+// ─── PROFILE FORM ─────────────────────────────────────────────
+function populateProfileForm() {
+  if (!ARTIST_PROFILE) return;
+  const p = ARTIST_PROFILE;
+  document.getElementById('pf-name').value      = p.stage_name || '';
+  document.getElementById('pf-ig').value        = p.instagram || '';
+  document.getElementById('pf-location').value  = p.location || '';
+  document.getElementById('pf-bio').value       = p.bio || '';
+  document.getElementById('pf-rate-min').value  = p.rate_min || '';
+  document.getElementById('pf-rate-max').value  = p.rate_max || '';
+  selectedGenres = p.genres || [];
+  profilePublic = p.is_public !== false;
+  setVisibility(profilePublic, false);
+  if (p.photo_url) {
+    document.getElementById('avatar-preview').innerHTML = `<img src="${p.photo_url}">`;
+  }
+  // Public link
+  if (p.id) {
+    const url = `${PUBLIC_PROFILE_URL}?id=${p.id}`;
+    document.getElementById('public-link-url').textContent = url;
+    document.getElementById('public-link-card').style.display = 'flex';
+  }
+}
+
+function buildGenreChips() {
+  const wrap = document.getElementById('genre-chips');
+  wrap.innerHTML = GENRES.map(g =>
+    `<button class="chip${selectedGenres.includes(g)?' active':''}" onclick="toggleGenre('${g}',this)">${g}</button>`
+  ).join('');
+}
+
+function toggleGenre(g, el) {
+  if (selectedGenres.includes(g)) {
+    selectedGenres = selectedGenres.filter(x=>x!==g);
+    el.classList.remove('active');
+  } else {
+    selectedGenres.push(g);
+    el.classList.add('active');
+  }
+}
+
+function setVisibility(val, updateUI = true) {
+  profilePublic = val;
+  if (!updateUI) return;
+  document.querySelectorAll('#visibility-group .toggle-btn').forEach((b,i)=>{
+    b.classList.toggle('active', i === (val ? 0 : 1));
+    if (i===0) b.classList.toggle('yes', val);
+    if (i===1) b.classList.toggle('no', !val);
+  });
+}
+
+function handlePhotoSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  pendingPhotoBlob = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('avatar-preview').innerHTML = `<img src="${e.target.result}">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveProfile() {
+  const updates = {
+    stage_name: document.getElementById('pf-name').value.trim(),
+    instagram:  document.getElementById('pf-ig').value.trim(),
+    location:   document.getElementById('pf-location').value.trim(),
+    bio:        document.getElementById('pf-bio').value.trim(),
+    rate_min:   parseInt(document.getElementById('pf-rate-min').value) || null,
+    rate_max:   parseInt(document.getElementById('pf-rate-max').value) || null,
+    genres:     selectedGenres,
+    is_public:  profilePublic,
+    updated_at: new Date().toISOString()
+  };
+  try {
+    if (pendingPhotoBlob && ARTIST_PROFILE) {
+      const ext  = pendingPhotoBlob.name.split('.').pop();
+      const path = `artists/${ARTIST_PROFILE.id}.${ext}`;
+      updates.photo_url = await sbStorage('atche-media', path, pendingPhotoBlob);
+      pendingPhotoBlob = null;
+    }
+    if (ARTIST_PROFILE) {
+      await sb(`artist_profiles?user_id=eq.${SESSION.user.id}`, {
+        method: 'PATCH', body: updates
+      });
+      ARTIST_PROFILE = { ...ARTIST_PROFILE, ...updates };
+    } else {
+      const res = await sb('artist_profiles', {
+        method: 'POST',
+        body: { user_id: SESSION.user.id, ...updates }
+      });
+      ARTIST_PROFILE = res[0];
+      renderOnboardingBanner();
+    }
+    document.getElementById('profile-save-msg').textContent = '✓ Saved';
+    setTimeout(() => { document.getElementById('profile-save-msg').textContent = '' }, 3000);
+    document.getElementById('topbar-name').textContent = updates.stage_name;
+    populateProfileForm();
+    toast('Profile saved', 'success');
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── BOOKINGS ─────────────────────────────────────────────────
+async function loadBookings() {
+  if (!ARTIST_PROFILE) { BOOKINGS = []; return }
+  try {
+    BOOKINGS = await sb(`booking_requests?artist_id=eq.${ARTIST_PROFILE.id}&order=created_at.desc&select=*`);
+    const pending = BOOKINGS.filter(b=>b.status==='pending').length;
+    const badge = document.getElementById('bookings-badge');
+    badge.style.display = pending > 0 ? 'flex' : 'none';
+    badge.textContent = pending;
+  } catch(e) { BOOKINGS = [] }
+}
+
+function renderBookings(container, filter) {
+  const list = filter ? BOOKINGS.filter(filter) : BOOKINGS;
+  if (!list.length) {
+    container.innerHTML = `<div class="empty"><div class="icon">📬</div><p>No booking requests yet.</p></div>`;
+    return;
+  }
+  container.innerHTML = list.map(b => bookingCard(b)).join('');
+}
+
+function bookingCard(b) {
+  const statusCls = {pending:'status-pending',accepted:'status-accepted',declined:'status-declined',completed:'status-completed'}[b.status]||'status-pending';
+  const d = b.event_date ? new Date(b.event_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+  const actions = b.status === 'pending' ? `
+    <div class="booking-actions">
+      <button class="btn-accept" onclick="respondBooking('${b.id}','accepted')">Accept</button>
+      <button class="btn-decline" onclick="respondBooking('${b.id}','declined')">Decline</button>
+    </div>` : '';
+  const recordBtn = b.status === 'accepted' ? `
+    <button class="btn-sm" style="margin-top:12px" onclick="openRecordModal('${b.id}','${ARTIST_PROFILE.id}','${b.event_name||'Event'}')">+ Post-Event Record</button>` : '';
+  return `
+  <div class="booking-card">
+    <div class="booking-header">
+      <div>
+        <div class="booking-title">${b.event_name || 'Untitled Event'}</div>
+        <div class="booking-meta">${b.venue_name||''} · ${b.city||''}</div>
+      </div>
+      <span class="status-pill ${statusCls}">${b.status}</span>
+    </div>
+    <div class="booking-details">
+      <div class="booking-detail"><div class="label">Date</div><div class="val">${d}</div></div>
+      <div class="booking-detail"><div class="label">Time</div><div class="val">${b.start_time||'TBD'}</div></div>
+      <div class="booking-detail"><div class="label">Offered Rate</div><div class="val">$${(b.offered_rate||0).toLocaleString()}</div></div>
+      <div class="booking-detail"><div class="label">ATCHÉ Fee</div><div class="val">$${(b.atche_fee||0).toLocaleString()} (to venue)</div></div>
+    </div>
+    ${b.message ? `<p style="margin-top:14px;font-size:.8rem;color:var(--text2);font-style:italic">"${b.message}"</p>` : ''}
+    ${actions}${recordBtn}
+  </div>`;
+}
+
+async function respondBooking(id, status) {
+  try {
+    await sb(`booking_requests?id=eq.${id}`, {
+      method: 'PATCH', body: { status, updated_at: new Date().toISOString() }
+    });
+    const b = BOOKINGS.find(x=>x.id===id);
+    if (b) b.status = status;
+    renderBookings(document.getElementById('bookings-list'));
+    toast(`Booking ${status}`, 'success');
+    await loadBookings();
+    renderOverview();
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── ONBOARDING BANNER ────────────────────────────────────────
+const OB_DISMISSED_KEY = 'atche_ob_dismissed';
+function renderOnboardingBanner() {
+  const banner = document.getElementById('onboarding-banner');
+  if (!banner) return;
+  if (localStorage.getItem(OB_DISMISSED_KEY) === '1') { banner.style.display = 'none'; return; }
+  const p = ARTIST_PROFILE;
+  if (!p) { banner.style.display = 'none'; return; }
+
+  const fields = [
+    { label: 'Photo',     done: !!p.photo_url },
+    { label: 'Bio',       done: !!p.bio && p.bio.trim().length > 20 },
+    { label: 'Instagram', done: !!p.instagram },
+    { label: 'Location',  done: !!p.location },
+    { label: 'Rate',      done: !!p.rate_min && !!p.rate_max },
+    { label: 'Genres',    done: p.genres && p.genres.length > 0 },
+  ];
+  const done = fields.filter(f => f.done).length;
+  const pct  = Math.round((done / fields.length) * 100);
+
+  if (pct === 100) { banner.style.display = 'none'; return; }
+
+  banner.style.display = 'block';
+  banner.innerHTML = `
+    <div class="ob-top">
+      <div class="ob-title">Complete your profile to get discovered</div>
+      <div class="ob-pct">${pct}%</div>
+    </div>
+    <div class="ob-bar-wrap"><div class="ob-bar" style="width:${pct}%"></div></div>
+    <div class="ob-fields">${
+      fields.map(f => `<div class="ob-field ${f.done ? 'done' : 'miss'}">
+        <div class="ob-dot"></div>${f.label}
+      </div>`).join('')
+    }</div>
+    <div class="ob-footer">
+      <button class="ob-cta" onclick="showTab('profile'); banner.style.display='none';">Fill In Missing Fields →</button>
+      <button class="ob-skip" onclick="localStorage.setItem('','1');document.getElementById('onboarding-banner').style.display='none';">Hide for now</button>
+    </div>
+  `;
+}
+
+// ─── OVERVIEW ─────────────────────────────────────────────────
+function renderOverview() {
+  renderOnboardingBanner();
+  const p = ARTIST_PROFILE;
+  if (p) {
+    document.getElementById('stat-events').textContent  = p.total_events || 0;
+    document.getElementById('stat-energy').textContent  = p.avg_energy > 0 ? Number(p.avg_energy).toFixed(1) : '—';
+    document.getElementById('stat-rebook').textContent  = p.rebook_rate > 0 ? Math.round(p.rebook_rate)+'%' : '—';
+    document.getElementById('stat-ontime').textContent  = p.on_time_rate > 0 ? Math.round(p.on_time_rate)+'%' : '—';
+  }
+  const pending = BOOKINGS.filter(b=>b.status==='pending');
+  const el = document.getElementById('pending-preview');
+  if (pending.length) {
+    el.innerHTML = pending.slice(0,2).map(b=>bookingCard(b)).join('');
+  } else {
+    el.innerHTML = `<div class="empty"><div class="icon">🎵</div><p>No pending requests. Share your profile to get booked.</p></div>`;
+  }
+}
+
+// ─── POST-EVENT RECORD MODAL ──────────────────────────────────
+function openRecordModal(bookingId, artistId, eventName) {
+  activeRecordBookingId = bookingId;
+  activeRecordArtistId  = artistId;
+  energyVal = 0; onTimeVal = null; rebookVal = null;
+  document.getElementById('record-event-name').textContent = eventName;
+  document.getElementById('record-notes').value = '';
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
+  ['ontime-yes','ontime-no','rebook-yes','rebook-no'].forEach(id=>{
+    document.getElementById(id).classList.remove('active','yes','no');
+  });
+  document.getElementById('record-modal').classList.add('open');
+}
+function closeRecordModal() { document.getElementById('record-modal').classList.remove('open') }
+
+function setEnergy(n) {
+  energyVal = n;
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));
+}
+function setOnTime(v) {
+  onTimeVal = v;
+  document.getElementById('ontime-yes').className = 'toggle-btn'+(v?' active yes':'');
+  document.getElementById('ontime-no').className  = 'toggle-btn'+(!v?' active no':'');
+}
+function setRebook(v) {
+  rebookVal = v;
+  document.getElementById('rebook-yes').className = 'toggle-btn'+(v?' active yes':'');
+  document.getElementById('rebook-no').className  = 'toggle-btn'+(!v?' active no':'');
+}
+
+async function submitRecord() {
+  if (!energyVal) { toast('Select crowd energy', 'error'); return }
+  if (onTimeVal === null) { toast('Select on-time answer', 'error'); return }
+  if (rebookVal === null) { toast('Select rebook answer', 'error'); return }
+  try {
+    const booking = BOOKINGS.find(b=>b.id===activeRecordBookingId);
+    await sb('event_records', {
+      method: 'POST',
+      body: {
+        booking_id:     activeRecordBookingId,
+        artist_id:      activeRecordArtistId,
+        venue_user_id:  booking?.venue_user_id,
+        crowd_energy:   energyVal,
+        showed_on_time: onTimeVal,
+        would_rebook:   rebookVal,
+        notes:          document.getElementById('record-notes').value.trim(),
+        recorded_by:    SESSION.user.id
+      }
+    });
+    closeRecordModal();
+    toast('Record submitted', 'success');
+    // Reload profile stats
+    const profiles = await sb(`artist_profiles?user_id=eq.${SESSION.user.id}&select=*`);
+    ARTIST_PROFILE = profiles[0];
+    renderOverview();
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── PUBLIC LINK ──────────────────────────────────────────────
+function copyPublicLink() {
+  const url = document.getElementById('public-link-url').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('copy-link-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy Link'; btn.classList.remove('copied') }, 2000);
+  });
+}
+
+// ─── TAB SWITCHING ────────────────────────────────────────────
+function showTab(name) {
+  ['overview','bookings','profile'].forEach(v=>{
+    document.getElementById(`view-${v}`).style.display = v===name?'block':'none';
+    document.getElementById(`tab-${v}`).classList.toggle('active', v===name);
+  });
+  if (name === 'bookings') renderBookings(document.getElementById('bookings-list'));
+  if (name === 'profile') buildGenreChips();
+}
+
+// ─── TOAST ────────────────────────────────────────────────────
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+// ─── BOOT ─────────────────────────────────────────────────────
+(async () => {
+  // Check for saved session
+  const saved = localStorage.getItem('atche_session');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      // expires_at is absolute unix seconds; fall back to expires_in if missing
+      const expiresAt = s.expires_at || (s.expires_in ? Math.floor(Date.now()/1000) + s.expires_in : 0);
+      if (expiresAt && Date.now() / 1000 < expiresAt) {
+        SESSION = { ...s, expires_at: expiresAt };
+        await initApp();
+        return;
+      }
+      // Session expired — clear it
+      localStorage.removeItem('atche_session');
+    } catch(e) {}
+  }
+  document.getElementById('auth-screen').style.display = 'flex';
+})();
+
+</script>
+</body>
+</html>
