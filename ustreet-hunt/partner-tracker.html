@@ -318,6 +318,16 @@ function load() {
   if (raw) {
     try { partners = JSON.parse(raw); }
     catch { partners = [...SEED]; save(); }
+    // Always merge seed partners — ensures key rows (Cookies DC, etc.) are never missing
+    let changed = false;
+    SEED.forEach(seed => {
+      const already = partners.find(p => p.venue.toLowerCase() === seed.venue.toLowerCase());
+      if (!already) {
+        partners.push({...seed});
+        changed = true;
+      }
+    });
+    if (changed) save();
   } else {
     partners = [...SEED];
     save();
